@@ -1,0 +1,1 @@
+<div> BODY: each page has its own body </div>

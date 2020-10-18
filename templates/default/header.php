@@ -1,0 +1,1 @@
+<div>HEADER: image, time, name, login link</div>

@@ -1,10 +1,52 @@
-<IfModule dir_module>
-    DirectoryIndex index.php index.html
-</IfModule>
+order allow,deny
+allow from all
+
+DirectoryIndex index.php
+
+############################################
+## Disallow cros-plaform
+############################################
+Header set Access-Control-Allow-Origin "null"
+
+############################################
+## AddDefaultCharset
+############################################
 AddDefaultCharset UTF-8
-AddCharset UTF-8 .html
-<FilesMatch "\.(html)$">
-   Header set Cache-Control: "no-cache, no-store"
-   Header unset ETag
-</FilesMatch>
-Header set X-Content-Type-Options nosniff
+
+<IfModule mod_rewrite.c>
+    ############################################
+    ## enable rewrites
+    ############################################
+    Options +FollowSymLinks
+    RewriteEngine on
+
+    ############################################
+    ## TRACE and TRACK HTTP methods disabled to prevent XSS attacks
+    ############################################
+    RewriteCond %{REQUEST_METHOD} ^TRAC[EK]
+    RewriteRule .* - [L,R=405]
+
+    ############################################
+    ## never rewrite for existing files, directories and links
+    ############################################
+    #RewriteCond %{REQUEST_URI} !^/(web|media)/
+    #RewriteCond %{REQUEST_URI} !^/favicon.ico$
+    #RewriteRule .* index.php [L]
+#    RewriteCond %{REQUEST_FILENAME} !-f
+#    RewriteCond %{REQUEST_FILENAME} !-d
+#    RewriteCond %{REQUEST_FILENAME} !-l
+#    RewriteRule .* index.php [L]
+</IfModule>
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresDefault "access plus 1 week"
+    ExpiresByType image/jpg "access plus 1 week"
+    ExpiresByType image/jpeg "access plus 1 week"
+    ExpiresByType image/gif "access plus 1 week"
+    ExpiresByType image/png "access plus 1 week"
+    ExpiresByType text/css "access plus 1 week"
+    ExpiresByType application/pdf "access plus 1 week"
+    ExpiresByType text/x-javascript "access plus 1 week"
+    ExpiresByType image/x-icon "access plus 1 week"
+</IfModule>

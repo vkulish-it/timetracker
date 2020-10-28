@@ -1,5 +1,5 @@
 <h1>Register Form</h1>
-<form action="/registration.php" method="post">
+<form action="/user/create.php" method="post">
     <p>Please fill in this form to create an account.</p>
     <div>
         <label for="firstname">Fist name</label>
@@ -12,6 +12,10 @@
     <div>
         <label for="email">Email</label>
         <input type="email" placeholder="Enter Email" name="email" id="email" required>
+    </div>
+    <div>
+        <label for="phone">Phone</label>
+        <input type="phone" placeholder="Enter Phone Number" name="phone" id="phone" required>
     </div>
     <div>
         <label for="psw">Password</label>

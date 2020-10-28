@@ -1,1 +1,3 @@
 .idea/
+/App/config/db.php
+/example/

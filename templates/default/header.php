@@ -1,17 +1,24 @@
-<div>HEADER: login/logout link, user name, current datetime, user logo</div>
+<div id="current_date_time_block"></div>
 
-
-<div id="current_date_time_block2"></div>
+<?php $config = include_once $_SERVER['DOCUMENT_ROOT'] . '/config.php'; ?>
+<?php if ($config['logged in'] === true) { ?>
+    <p><a href="#">Logout</a></p>
+<?php } else { ?>
+    <p><a href="/login.php">Login</a></p>
+<?php } ?>
+<?php echo ($config['user_name']); ?>
+<img src="<?php echo $config['logo_path']; ?>" alt="#" width="50" height="50" />
 
 <script type="text/javascript">
-    setInterval(function () {
+    function currentTime() {
         let today = new Date();
-        document.getElementById('current_date_time_block2').innerHTML = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds(;
-    }, 1000);
+        document.getElementById('current_date_time_block').innerHTML = fixFormat(today.getHours()) + ":" + fixFormat(today.getMinutes()) + ":" + fixFormat(today.getSeconds()) + " " + today.getFullYear() + "-" + fixFormat(today.getMonth()+1) + "-" + fixFormat(today.getDate());
+    }
+    function fixFormat(value) {
+        if (value.toString().length === 1) {
+            value = "0" + value;
+        }
+        return value;
+    }
+    setInterval(currentTime, 1000);
 </script>
-
-<!--<form enctype="multipart/form-data" method="post">-->
-<!--    <p>Download user logo</p>-->
-<!--    <p><input type="file" name="photo" multiple accept="image/*,image/jpeg">-->
-<!--        <input type="submit" value="Download"></p>-->
-<!--</form>-->

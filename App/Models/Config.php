@@ -5,14 +5,20 @@ namespace App\Models;
 class Config
 {
     private $db;
-    public $rootDir;
     private $defaultValue;
+    private $baseUrl;
 
     public function __construct()
     {
-        $this->rootDir = realpath(__DIR__ . '/../..');
-        $this->db = include_once $this->rootDir . "/App/config/db.php";
-        $this->defaultValue = include_once $this->rootDir . "/App/config/default.php";
+        $this->db = include ROOT_DIR . "/App/config/db.php";
+        $setting = include_once ROOT_DIR . "/App/config/setting.php";
+        $this->defaultValue = $setting["default"];
+        $this->baseUrl = $setting["base_url"];
+    }
+
+    public function getBaseUrl()
+    {
+        return $this->baseUrl;
     }
 
     public function getDbConf()

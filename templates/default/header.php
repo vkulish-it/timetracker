@@ -1,10 +1,10 @@
 <div id="current_date_time_block"></div>
 
-<?php $config = include_once $_SERVER['DOCUMENT_ROOT'] . '/config.php'; ?>
+<?php $config = include_once ROOT_DIR . '/config.php'; ?>
 <?php if ($config['logged in'] === true) { ?>
     <p><a href="#">Logout</a></p>
 <?php } else { ?>
-    <p><a href="/login.php">Login</a></p>
+    <p><a href="/templates/login/login.php">Login</a></p>
 <?php } ?>
 <?php echo ($config['user_name']); ?>
 <img src="<?php echo $config['logo_path']; ?>" alt="#" width="50" height="50" />

@@ -1,5 +1,5 @@
 <h1>Register Form</h1>
-<form action="/user/create.php" method="post">
+<form action="/user/registration.php" method="post">
     <p>Please fill in this form to create an account.</p>
     <div>
         <label for="firstname">Fist name</label>
@@ -33,7 +33,7 @@
     </div>
     <input type="submit" value="Register">
     <input type="reset" value="Reset">
-    <p>Already have an account? <a href="/login.php">Sign in</a>.</p>
+    <p>Already have an account? <a href="/templates/login/login.php">Sign in</a>.</p>
 </form>
 
 <!-- captcha; -->

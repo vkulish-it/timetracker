@@ -37,13 +37,13 @@ if ($conn->connect_error) {
 
 $sqlCommand = "CREATE TABLE Users (
 id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY COMMENT 'Id',
-email VARCHAR(50) NOT NULL COMMENT 'Email',
+email VARCHAR(50) NOT NULL UNIQUE COMMENT 'Email',
 passwd_hash CHAR(72) NOT NULL COMMENT 'Password hash',
 phone VARCHAR(15)NOT NULL COMMENT 'Phone number',
 firstname VARCHAR(50) NOT NULL COMMENT 'Fist name',
 lastname VARCHAR(50) NOT NULL COMMENT 'Last name',
 logo_img_url TINYTEXT NOT NULL COMMENT 'Logo of user',
-enabled BOOLEAN NOT NULL DEFAULT TRUE COMMENT '???????',
+enabled BOOLEAN NOT NULL DEFAULT TRUE COMMENT 'Enabled',
 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'Time of creating',
 update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Time of updating'
 )

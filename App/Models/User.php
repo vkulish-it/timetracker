@@ -6,12 +6,7 @@ class User
     const SESSION_KEY_USER_DATA = 'user';
     const SESSION_KEY_USER_IS_LOGGED_IN = 'is_logged_in';
 
-    public function __construct()
-    {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
-        }
-    }
+    public $defaultImageUrl = '/media/user-logo.png';
 
     /**
      * @return bool
@@ -50,5 +45,39 @@ class User
         }
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        if ($this->isLoggedIn()) {
+            $lastName = $_SESSION[self::SESSION_KEY_USER_DATA]['lastname'];
+            $firstName = $_SESSION[self::SESSION_KEY_USER_DATA]['firstname'];
+            return $firstName . " " . $lastName;
+        } else {
+            return "";
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getLogoUrl()
+    {
+        $url = $this->defaultImageUrl;
+
+        if ($this->isLoggedIn()) {
+            $userLogoUrl = $_SESSION[self::SESSION_KEY_USER_DATA]['logo_img_url'];
+            if ($userLogoUrl) {
+                $url = $userLogoUrl;
+            }
+        }
+
+        $config = new Config();
+        $baseUrl = $config->getBaseUrl();
+
+        return $baseUrl . '/' . $url;
     }
 }

@@ -12,7 +12,6 @@ class Response
 
     public function __construct()
     {
-        include_once ROOT_DIR . "/App/Models/Config.php";
         $this->config = new Config();
     }
 

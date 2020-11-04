@@ -1,3 +1,6 @@
-.idea/
 /App/config/db.php
+/media/user-logo/
+
+.idea/
 /!!!TEMP/
+/test/

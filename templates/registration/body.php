@@ -1,5 +1,5 @@
 <h1>Register Form</h1>
-<form action="/user/registration.php" method="post">
+<form action="/user/registration" method="post">
     <p>Please fill in this form to create an account.</p>
     <div>
         <label for="firstname">Fist name</label>

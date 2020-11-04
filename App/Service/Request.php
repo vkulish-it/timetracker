@@ -4,10 +4,10 @@ namespace App\Service;
 
 class Request
 {
-
     public function getControllerPath() {
         return trim($_SERVER['REDIRECT_URL'], '/');
     }
+
     /**
      * @return array
      */

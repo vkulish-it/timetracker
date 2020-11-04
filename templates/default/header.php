@@ -1,13 +1,16 @@
 <div id="current_date_time_block"></div>
 
-<?php $config = include_once ROOT_DIR . '/config.php'; ?>
-<?php if ($config['logged in'] === true) { ?>
-    <p><a href="#">Logout</a></p>
+<?php include_once ROOT_DIR . '/App/Models/User.php'; ?>
+<?php $user = new \App\Models\User(); ?>
+<?php if ($user->isLoggedIn()) { ?>
+    <span><a href="/logout">Logout</a></span>
 <?php } else { ?>
-    <p><a href="/templates/login/login.php">Login</a></p>
+    <span><a href="/login">Login</a></span>
 <?php } ?>
-<?php echo ($config['user_name']); ?>
-<img src="<?php echo $config['logo_path']; ?>" alt="#" width="50" height="50" />
+<span><?php echo $user->getName(); ?></span>
+
+<img src="<?php echo $user->getLogoUrl(); ?>" alt="#" width="50" height="50" />
+
 
 <script type="text/javascript">
     function currentTime() {

@@ -1,5 +1,5 @@
 <h1>Contact Us</h1>
-<form action="/contact-us.php" method="post">
+<form action="/templates/contact-us/page.php" method="post">
     <div>
         <label for="fname">First Name</label>
         <input type="text" id="fname" name="firstname" placeholder="Your name..">

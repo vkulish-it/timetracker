@@ -29,6 +29,7 @@ AddDefaultCharset UTF-8
     ############################################
     ## never rewrite for existing files, directories and links
     ############################################
+    RewriteCond %{REQUEST_URI} !^/(test)/
     RewriteCond %{REQUEST_URI} !^/(media)/
     RewriteCond %{REQUEST_URI} !^/favicon.ico$
     RewriteRule .* index.php [L]

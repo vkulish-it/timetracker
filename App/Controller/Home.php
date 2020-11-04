@@ -9,7 +9,6 @@ class Home
     private $user;
 
     public function __construct() {
-        include_once ROOT_DIR . "/App/Models/User.php";
         $this->user = new User();
     }
 

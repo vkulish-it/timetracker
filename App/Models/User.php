@@ -6,7 +6,7 @@ class User
     const SESSION_KEY_USER_DATA = 'user';
     const SESSION_KEY_USER_IS_LOGGED_IN = 'is_logged_in';
 
-    public $defaultImageUrl = 'media/user-logo.png';
+    public $defaultImageUrl = 'media/img/user-logo-default.png';
 
     /**
      * @return bool

@@ -2,7 +2,12 @@
 
 namespace App\Controller;
 
-class NotFound {
+use App\Controller\HttpController;
+
+class NotFound extends HttpController
+{
+    protected $checkForLoggedIn = false;
+
     public function run() {
         echo "Not Found Page";
     }

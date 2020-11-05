@@ -1,22 +1,12 @@
 <?php
 namespace App\Controller\User;
 
-use App\Models\Config;
-use App\Models\User;
-use App\Service\Request;
 use App\Service\Response;
+use App\Controller\HttpController;
 
-class Registration
+class Registration extends HttpController
 {
-    private $request;
-    private $response;
-    private $config;
-
-    public function __construct() {
-        $this->response = new Response();
-        $this->request = new Request();
-        $this->config = new Config();
-    }
+    protected $checkForLoggedIn = false;
 
     public function run() {
 // @TODO check all request data

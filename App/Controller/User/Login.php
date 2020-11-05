@@ -1,24 +1,12 @@
 <?php
 namespace App\Controller\User;
 
-use App\Models\Config;
-use App\Service\Request;
-use App\Service\Response;
-use App\Models\User;
+use App\Controller\HttpController;
 
-class Login
+class Login extends HttpController
 {
-    private $request;
-    private $response;
-    private $user;
-    private $config;
 
-    public function __construct() {
-        $this->response = new Response();
-        $this->request = new Request();
-        $this->user = new User();
-        $this->config = new Config();
-    }
+    protected $checkForLoggedIn = false;
 
     public function run() {
         $login = $this->request->getParam("email");

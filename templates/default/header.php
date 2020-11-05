@@ -1,6 +1,5 @@
 <div id="current_date_time_block"></div>
 
-<?php include_once ROOT_DIR . '/App/Models/User.php'; ?>
 <?php $user = new \App\Models\User(); ?>
 <?php if ($user->isLoggedIn()) { ?>
     <span><a href="/logout">Logout</a></span>

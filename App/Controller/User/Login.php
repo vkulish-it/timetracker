@@ -18,7 +18,7 @@ class Login extends HttpController
             if ($userData && password_verify($passwd, $userData->passwd_hash)) {
                 $userDataArray = get_object_vars($userData);
                 $this->user->login($userDataArray);
-                $this->response->setRedirect("");
+                $this->response->setRedirect("main");
             } else {
                 // @TODO add message invalid email or password
                 $this->response->setRedirect("login");

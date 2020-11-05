@@ -6,7 +6,7 @@ class User
     const SESSION_KEY_USER_DATA = 'user';
     const SESSION_KEY_USER_IS_LOGGED_IN = 'is_logged_in';
 
-    public $defaultImageUrl = '/media/user-logo.png';
+    public $defaultImageUrl = 'media/user-logo.png';
 
     /**
      * @return bool
@@ -59,6 +59,15 @@ class User
         } else {
             return "";
         }
+    }
+
+    /**
+     * @param string $fieldName
+     * @return string|null
+     */
+    public function getAccountData(string $fieldName)
+    {
+        return $_SESSION[self::SESSION_KEY_USER_DATA][$fieldName];
     }
 
     /**

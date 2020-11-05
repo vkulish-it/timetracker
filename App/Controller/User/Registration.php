@@ -15,7 +15,7 @@ class Registration extends HttpController
         VALUES (NULL, '" . $this->request->getParam('email') . "', '" . password_hash($this->request->getParam('psw'), PASSWORD_DEFAULT) . "', '" . $this->request->getParam('phone') . "', '" . $this->request->getParam('firstname') . "', '" . $this->request->getParam('lastname') . "', '" . $this->request->getParam('logo_img_url') . "', '1')";
         if ($connection->query($sqlCommand) === TRUE) {
 // @TODO login user           $userId = $connection->insert_id;
-            $this->response->setRedirect("", true, Response::CODE_FOUND);
+            $this->response->setRedirect("main", true, Response::CODE_FOUND);
         } else {
 // @TODO           echo "Error: " . $sqlCommand . "<br>" . $connection->error;
             $this->response->setRedirect("registration");

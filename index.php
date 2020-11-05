@@ -6,7 +6,7 @@ use App\Service\Request;
 define('ROOT_DIR', realpath(__DIR__));
 /** include file (library) with class description by class name */
 spl_autoload_register(function ($className) {
-        include ROOT_DIR . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $className) . '.php';
+        include_once ROOT_DIR . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $className) . '.php';
     }
 );
 session_start();
@@ -21,6 +21,7 @@ $classes = [
     'not-found' => "App\Controller\NotFound",
     'registration' => "App\Controller\RegistrationForm",
     'user/registration' => "App\Controller\User\Registration",
+    'main' => "App\Controller\Account\Main",
     // @todo describe other controllers
 ];
 $controllerClass = "App\Controller\NotFound";

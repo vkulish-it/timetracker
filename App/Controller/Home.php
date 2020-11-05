@@ -2,13 +2,10 @@
 
 namespace App\Controller;
 
-use App\Controller\HttpController;
+use App\Controller\Account\Main;
 
-// @todo account page controller
-class Home extends HttpController
+// @todo account page controller - remove Home or Main
+class Home extends Main
 {
-    public function run() {
-        // @todo fix after tracker page is done
-        include_once ROOT_DIR . "/tracker.php";
-    }
+
 }

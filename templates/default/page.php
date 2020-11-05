@@ -2,7 +2,11 @@
 <html lang='en'>
 <head>
     <?php include_once "./head.php"; ?>
-
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+    <meta name="robots" content="noindex,nofollow">
+    <title>TimeTracker</title>
     <script src="text/script.js"></script>
     <title></title>
 </head>

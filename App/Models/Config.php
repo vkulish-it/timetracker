@@ -11,7 +11,7 @@ class Config
     public function __construct()
     {
         $this->db = include ROOT_DIR . "/App/config/db.php";
-        $setting = include_once ROOT_DIR . "/App/config/setting.php";
+        $setting = include ROOT_DIR . "/App/config/setting.php";
         $this->defaultValue = $setting["default"];
         $this->baseUrl = $setting["base_url"];
     }

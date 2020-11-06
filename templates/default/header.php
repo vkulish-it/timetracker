@@ -1,14 +1,18 @@
-<div id="current_date_time_block"></div>
-
 <?php $user = new \App\Models\User(); ?>
-<?php if ($user->isLoggedIn()) { ?>
-    <span><a href="/logout">Logout</a></span>
-<?php } else { ?>
-    <span><a href="/login">Login</a></span>
+<div id="header">
+    <div id="current_date_time_block"></div>
+    <?php if ($user->isLoggedIn()) { ?>
+        <span><a href="/logout">Logout</a></span>
+    <?php } else { ?>
+        <span><a href="/login">Login</a></span>
+    <?php } ?>
+    <span><?php echo $user->getName(); ?></span>
+    <img src="<?php echo $user->getLogoUrl(); ?>" alt="#" width="50" height="50" />
+</div>
+<?php $messages = $user->getMessage(); ?>
+<?php if ($messages) { ?>
+    <div class="messages"><?php echo $messages; ?></div>
 <?php } ?>
-<span><?php echo $user->getName(); ?></span>
-
-<img src="<?php echo $user->getLogoUrl(); ?>" alt="#" width="50" height="50" />
 
 
 <script type="text/javascript">

@@ -46,8 +46,8 @@ class Config
         return $this->db['db_user_password'];
     }
 
-    public function getFontSize()
+    public function getDefaultAccountSettings()
     {
-        return $this->defaultValue["font_size"];
+        return $this->defaultValue;
     }
 }

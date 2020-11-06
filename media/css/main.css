@@ -44,3 +44,16 @@
     border: 1px solid #ccc;
     width: calc(100% - 200px);
 }
+
+
+/* Style the rows */
+.row {
+
+}
+.row .row-btn {
+    width: 100%;
+}
+.row .container {
+    width: 100%;
+    padding: 20px;
+}

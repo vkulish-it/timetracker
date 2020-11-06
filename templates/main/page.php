@@ -7,7 +7,7 @@
     <meta name="author" content="">
     <meta name="robots" content="noindex,nofollow">
     <title>TimeTracker</title>
-    <link rel="stylesheet" href="/media/css/main/tabs.css">
+    <link rel="stylesheet" href="/media/css/main.css">
     <script src="/media/js/main/tabs.js"></script>
 </head>
 <body>

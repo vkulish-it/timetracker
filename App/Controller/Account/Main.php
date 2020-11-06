@@ -4,7 +4,6 @@ namespace App\Controller\Account;
 
 use \App\Controller\HttpController;
 
-// @todo account page controller
 class Main extends HttpController
 {
     protected $checkForLoggedIn = true;

@@ -10,3 +10,6 @@
     </div>
     <input type="submit" value="Submit">
 </form>
+<div>
+    Do not have an account? Register <a href="/registration">HERE</a>
+</div>

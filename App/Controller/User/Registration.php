@@ -11,13 +11,13 @@ class Registration extends HttpController
     public function run() {
 // @TODO check all request data
         $connection = new \mysqli($this->config->getDBHost(), $this->config->getDBUserName(), $this->config->getDBUserPassword(), $this->config->getDBName());
-        $sqlCommand = "INSERT INTO Users (id, email, passwd_hash, phone, firstname, lastname, logo_img_url, enabled)
+        $sqlCommand = "INSERT INTO users (id, email, passwd_hash, phone, firstname, lastname, logo_img_url, enabled)
         VALUES (NULL, '" . $this->request->getParam('email') . "', '" . password_hash($this->request->getParam('psw'), PASSWORD_DEFAULT) . "', '" . $this->request->getParam('phone') . "', '" . $this->request->getParam('firstname') . "', '" . $this->request->getParam('lastname') . "', '" . $this->request->getParam('logo_img_url') . "', '1')";
         if ($connection->query($sqlCommand) === TRUE) {
-// @TODO login user           $userId = $connection->insert_id;
+            $this->user->addMessage("You were successfully registered. Please login");
             $this->response->setRedirect("main", true, Response::CODE_FOUND);
         } else {
-// @TODO           echo "Error: " . $sqlCommand . "<br>" . $connection->error;
+            $this->user->addMessage("Error: " . $sqlCommand . "<br>" . $connection->error . "<br>");
             $this->response->setRedirect("registration");
         }
         $connection->close();

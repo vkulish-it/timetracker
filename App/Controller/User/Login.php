@@ -20,11 +20,11 @@ class Login extends HttpController
                 $this->user->login($userDataArray);
                 $this->response->setRedirect("main");
             } else {
-                // @TODO add message invalid email or password
+                $this->user->addMessage("Invalid email or password");
                 $this->response->setRedirect("login");
             }
         } else {
-            // @TODO add mySQL error message
+            $this->user->addMessage("Error while checking email and password");
             $this->response->setRedirect("login");
         }
         $connection->close();

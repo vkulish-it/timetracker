@@ -22,6 +22,8 @@ $classes = [
     'registration' => "App\Controller\RegistrationForm",
     'user/registration' => "App\Controller\User\Registration",
     'main' => "App\Controller\Account\Main",
+    'main/account/edit' => "App\Controller\Account\Edit",
+    'main/account/design' => "App\Controller\Account\Design",
     // @todo describe other controllers
 ];
 $controllerClass = "App\Controller\NotFound";

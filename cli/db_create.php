@@ -35,7 +35,7 @@ if ($conn->connect_error) {
 
 /** create user table */
 
-$sqlCommand = "CREATE TABLE Users (
+$sqlCommand = "CREATE TABLE users (
 id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY COMMENT 'Id',
 email VARCHAR(50) NOT NULL UNIQUE COMMENT 'Email',
 passwd_hash CHAR(72) NOT NULL COMMENT 'Password hash',
@@ -50,26 +50,27 @@ update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMEN
 COMMENT='Table of users'";
 
 if ($conn->query($sqlCommand) === TRUE) {
-    echo "Table Users created successfully" . "\r\n";
+    echo "Table users created successfully" . "\r\n";
 } else {
-    echo "Error creating table Users: " . $conn->error . "\r\n";
+    echo "Error creating table users: " . $conn->error . "\r\n";
 }
 
 /** create Settings table */
-$sqlCommand = "CREATE TABLE Settings (
+$sqlCommand = "CREATE TABLE settings (
 id INT(10) UNSIGNED AUTO_INCREMENT COMMENT 'Id',
 user_id INT(10) UNSIGNED NOT NULL COMMENT 'User Id',
-bkg_color VARCHAR(10) NOT NULL COMMENT 'Background color',
-main_bkg_color VARCHAR(10) NOT NULL COMMENT 'Main background color',
-prep_task_color VARCHAR(10) NOT NULL COMMENT 'Preparation task color',
-border_color VARCHAR(10) NOT NULL COMMENT 'Border color',
-font_color VARCHAR(10) NOT NULL COMMENT 'Font color',
-prep_task_name VARCHAR(10) NOT NULL COMMENT 'Preparation task name',
-wkg_hour_day VARCHAR(10) NOT NULL COMMENT 'Working hours per day',
-wkg_hour_week VARCHAR(10) NOT NULL COMMENT 'Working hours per week',
-wkg_hour_month VARCHAR(10) NOT NULL COMMENT 'Working hours per month',
+bkg_color VARCHAR(25) NULL COMMENT 'Background color',
+main_bkg_color VARCHAR(25) NULL COMMENT 'Main background color',
+prep_task_color VARCHAR(25) NULL COMMENT 'Preparation task color',
+border_color VARCHAR(25) NULL COMMENT 'Border color',
+font_color VARCHAR(25) NULL COMMENT 'Font color',
+font_size INT UNSIGNED NULL COMMENT 'Font size',
+prep_task_name VARCHAR(255) NULL COMMENT 'Preparation task name',
+wkg_hour_day INT UNSIGNED NULL COMMENT 'Working hours per day',
+wkg_hour_week INT UNSIGNED NULL COMMENT 'Working hours per week',
+wkg_hour_month INT UNSIGNED NULL COMMENT 'Working hours per month',
 PRIMARY KEY (id),
-FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE 
+FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE 
 )
 COMMENT='Table of settings'";
 
@@ -80,7 +81,7 @@ if ($conn->query($sqlCommand) === TRUE) {
 }
 
 /** create Tasks table */
-$sqlCommand = "CREATE TABLE Tasks (
+$sqlCommand = "CREATE TABLE tasks (
 id INT(10) UNSIGNED AUTO_INCREMENT COMMENT 'Id',
 user_id INT(10) UNSIGNED COMMENT 'User Id',
 name VARCHAR(20) NOT NULL COMMENT 'Name of the task',
@@ -89,7 +90,7 @@ time_finish TIMESTAMP COMMENT 'Time finishing of the task',
 duration TIME COMMENT 'Duration of the task',
 state_active BOOLEAN NOT NULL DEFAULT TRUE COMMENT 'State of activity',
 PRIMARY KEY (id),
-FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE 
+FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE 
 )
 COMMENT='Table of tasks'";
 

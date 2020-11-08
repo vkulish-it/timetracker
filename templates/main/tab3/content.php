@@ -3,7 +3,7 @@
 <h3>Account data settings</h3>
 
 <div class="row" id="user-data">
-    <button class="row-btn">Account Data</button>
+    <button class="row-btn-collapsible collapsed">Account Data</button>
     <div class="container">
         <form action="/main/account/edit" method="post" enctype="multipart/form-data">
             <div>
@@ -30,7 +30,7 @@
 </div>
 
 <div class="row" id="user-design">
-    <button class="row-btn">Design</button>
+    <button class="row-btn-collapsible collapsed">Design</button>
     <div class="container">
         <form action="/main/account/design" method="post" enctype="multipart/form-data">
             <fieldset>
@@ -74,30 +74,30 @@
 </div>
 
 <div class="row" id="user-tracker">
-    <button class="row-btn">Tracker</button>
+    <button class="row-btn-collapsible">Tracker</button>
     <div class="container">
         <form action="/main/account/time" method="post" enctype="multipart/form-data">
             <div>
-                <label for="name-non-billable">General Field Name (Non Billable Issue)</label>
-                <input type="text" name="name-non-billable" id="name-non-billable"
-                       value="<?php //@TODO ?>" required>
+                <label for="prep_task_name">Preparation time (Non Billable Issue)</label>
+                <input type="text" name="prep_task_name" id="prep_task_name"
+                       value="<?php echo $user->getAccountSettings('prep_task_name') ?>" required>
             </div>
             <fieldset>
                 <legend>Default Time (hours) Per:</legend>
                 <div>
                     <label for="time-day">Day</label>
-                    <input type="number" name="time-day" id="time-day"
-                           value="<?php //@TODO ?>" required>
+                    <input type="number" name="wkg_hour_day" id="wkg_hour_day'"
+                           value="<?php echo $user->getAccountSettings('wkg_hour_day') ?>" required>
                 </div>
                 <div>
                     <label for="time-week">Week</label>
-                    <input type="number" name="time-week" id="time-week"
-                           value="<?php //@TODO ?>" required>
+                    <input type="number" name="wkg_hour_week" id="wkg_hour_week"
+                           value="<?php echo $user->getAccountSettings('wkg_hour_week') ?>" required>
                 </div>
                 <div>
                     <label for="time-month">Month</label>
-                    <input type="number" name="time-month" id="time-month"
-                           value="<?php //@TODO ?>" required>
+                    <input type="number" name="wkg_hour_month" id="wkg_hour_month"
+                           value="<?php echo $user->getAccountSettings('wkg_hour_month') ?>" required>
                 </div>
             </fieldset>
             <div>
@@ -107,3 +107,9 @@
     </div>
 </div>
 
+<div class="row" id="user-remove">
+    <button class="row-btn-collapsible collapsed">Remove current account</button>
+    <div class="container">
+        <button onclick="deleteAccount()">Remove account</button>
+    </div>
+</div>

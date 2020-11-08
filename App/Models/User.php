@@ -47,7 +47,9 @@ class User
         if ($_SESSION && array_key_exists(self::SESSION_KEY_USER_IS_LOGGED_IN, $_SESSION)) {
             unset($_SESSION[self::SESSION_KEY_USER_IS_LOGGED_IN]);
         }
-
+        if ($_SESSION && array_key_exists(self::SESSION_KEY_USER_SETTINGS, $_SESSION)) {
+            unset($_SESSION[self::SESSION_KEY_USER_SETTINGS]);
+        }
         return $this;
     }
 
@@ -141,7 +143,7 @@ class User
             if ($userData) {
                 $_SESSION[self::SESSION_KEY_USER_DATA] = get_object_vars($userData);
             } else {
-                $this->addMessage("Error while updating session data");
+                $this->logout();
             }
         } else {
             $this->addMessage("Error while getting user data");

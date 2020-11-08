@@ -8,7 +8,7 @@
     <meta name="robots" content="noindex,nofollow">
     <title>TimeTracker</title>
     <link rel="stylesheet" href="/media/css/main.css">
-    <script src="/media/js/main/tabs.js"></script>
+    <script src="/media/js/main.js"></script>
 </head>
 <body>
 <?php include ROOT_DIR . "/templates/default/header.php"; ?>
@@ -17,3 +17,5 @@
 <?php include ROOT_DIR . "/templates/default/footer.php"; ?>
 </body>
 </html>
+
+

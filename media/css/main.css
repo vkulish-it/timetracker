@@ -48,12 +48,29 @@
 
 /* Style the rows */
 .row {
-
-}
-.row .row-btn {
     width: 100%;
 }
-.row .container {
+
+.row .row-btn-collapsible {
+    background-color: #eee;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+}
+
+.row .row-btn-collapsible + .container {
     width: 100%;
     padding: 20px;
 }
+
+.row .row-btn-collapsible.collapsed + .container {
+    display: none;
+}
+
+.row .row-btn-collapsible:hover {
+    background-color: #ccc;
+}
+

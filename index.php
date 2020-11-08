@@ -24,6 +24,8 @@ $classes = [
     'main' => "App\Controller\Account\Main",
     'main/account/edit' => "App\Controller\Account\Edit",
     'main/account/design' => "App\Controller\Account\Design",
+    'main/account/time' => "App\Controller\Account\Time",
+    'main/account/delete' => "App\Controller\Account\Delete",
     // @todo describe other controllers
 ];
 $controllerClass = "App\Controller\NotFound";

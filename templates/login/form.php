@@ -1,4 +1,3 @@
-<h1>Login Form</h1>
 <form action="/user/login" method="post">
     <div>
         <label for="email">email:</label>

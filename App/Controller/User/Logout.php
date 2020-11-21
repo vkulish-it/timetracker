@@ -8,6 +8,6 @@ class Logout extends HttpController
 {
     public function run() {
         $this->user->logout();
-        $this->response->setRedirect('login');
+        $this->response->setRedirect('home');
     }
 }

@@ -68,6 +68,16 @@ class User
     }
 
     /**
+     * @return int|null
+     */
+    public function getId()
+    {
+        if ($this->isLoggedIn()) {
+            return (int)$_SESSION[self::SESSION_KEY_USER_DATA]['id'];
+        }
+    }
+
+    /**
      * @param string $fieldName
      * @return string|null
      */

@@ -40,7 +40,7 @@
 .tabcontent {
     box-sizing: border-box;
     float: left;
-    padding: 0px 12px;
+    padding: 0px 50px;
     border: 1px solid #ccc;
     width: calc(100% - 200px);
 }
@@ -59,11 +59,13 @@
     border: none;
     text-align: left;
     outline: none;
+    border: 1px solid #ccc;
 }
 
 .row .row-btn-collapsible + .container {
     width: 100%;
     padding: 20px;
+    border: none;
 }
 
 .row .row-btn-collapsible.collapsed + .container {

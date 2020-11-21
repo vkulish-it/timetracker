@@ -4,7 +4,7 @@
     <?php if ($user->isLoggedIn()) { ?>
         <span><a href="/logout">Logout</a></span>
     <?php } else { ?>
-        <span><a href="/login">Login</a></span>
+<!--        <span><a href="/login">Login</a></span>-->
     <?php } ?>
     <span><?php echo $user->getName(); ?></span>
     <img src="<?php echo $user->getLogoUrl(); ?>" alt="#" width="50" height="50" />

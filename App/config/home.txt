@@ -1,0 +1,1 @@
+{"description":"Something interesting","sliders":[{"img":"\/media\/img\/img-slider-pr\/1.png","txt":"description 1"},{"img":"\/media\/img\/img-slider-pr\/2.png","txt":"description 2"},{"img":"\/media\/img\/img-slider-pr\/3.png","txt":"description 3"},{"img":"\/media\/img\/img-slider-pr\/4.png","txt":"description 4"}]}

@@ -2,10 +2,14 @@
 
 namespace App\Controller;
 
-use App\Controller\Account\Main;
+use \App\Controller\HttpController;
 
-// @todo account page controller - remove Home or Main
-class Home extends Main
+class Home extends HttpController
 {
+    protected $checkForLoggedIn = false;
 
+    public function run()
+    {
+        include_once ROOT_DIR . "/templates/home/page.php";
+    }
 }

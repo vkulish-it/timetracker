@@ -1,9 +1,13 @@
 <?php
-namespace App\Controller\User;
+namespace App\Controller\Admin;
 
 use App\Controller\HttpController;
 
-class Login extends HttpController
+/**
+ * Class AccountLogin
+ * @TODO Change this class function (draft)
+ */
+class AccountLogin extends HttpController
 {
 
     protected $checkForLoggedIn = false;

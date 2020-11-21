@@ -6,7 +6,8 @@
 </head>
 <body>
 <?php include ROOT_DIR . "/templates/default/header.php"; ?>
-<?php include ROOT_DIR . "/templates/contact-us/body.php"; ?>
+<h1>Contact Us</h1>
+<?php include ROOT_DIR . "/templates/contact-us/form.php"; ?>
 <?php include ROOT_DIR . "/templates/default/footer.php"; ?>
 </body>
 </html>

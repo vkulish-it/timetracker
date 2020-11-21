@@ -12,8 +12,11 @@ spl_autoload_register(function ($className) {
 session_start();
 $classes = [
     '' => "App\Controller\Home",
+    '/' => "App\Controller\Home",
     'home' => "App\Controller\Home",
     'index.php' => "App\Controller\Home",
+    'admin/login' => "App\Controller\Admin\LoginForm",
+    'admin/account/login' => "App\Controller\Admin\AccountLogin",
     'login' => "App\Controller\LoginForm",
     'user/login' => "App\Controller\User\Login",
     'logout' => "App\Controller\User\Logout",
@@ -26,6 +29,8 @@ $classes = [
     'main/account/design' => "App\Controller\Account\Design",
     'main/account/time' => "App\Controller\Account\Time",
     'main/account/delete' => "App\Controller\Account\Delete",
+    'tracker/create' => "App\Controller\Tracker\Create",
+
     // @todo describe other controllers
 ];
 $controllerClass = "App\Controller\NotFound";

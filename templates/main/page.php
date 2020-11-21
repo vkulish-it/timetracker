@@ -8,6 +8,7 @@
     <meta name="robots" content="noindex,nofollow">
     <title>TimeTracker</title>
     <link rel="stylesheet" href="/media/css/main.css">
+    <script src="/media/lib/jquery/jquery-1.12.4.min.js"></script>
     <script src="/media/js/main.js"></script>
 </head>
 <body>

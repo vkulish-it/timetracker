@@ -34,4 +34,8 @@ class Request
 
         return null;
     }
+
+    public function inputParams(string $string)
+    {
+    }
 }

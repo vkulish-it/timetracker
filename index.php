@@ -30,6 +30,8 @@ $classes = [
     'main/account/time' => "App\Controller\Account\Time",
     'main/account/delete' => "App\Controller\Account\Delete",
     'tracker/create' => "App\Controller\Tracker\Create",
+    'tracker/stop' => "App\Controller\Tracker\Stop",
+    'tracker/delete' => "App\Controller\Tracker\Delete",
 
     // @todo describe other controllers
 ];

@@ -11,10 +11,11 @@ abstract class AjaxController extends HttpController
     const RESPONSE_CODE_ERROR_LOGIN = 4;
     const RESPONSE_CODE_ERROR_MYSQL = 5;
 
+
     const RESPONSE_ERROR_MESSAGES = [
         self::RESPONSE_CODE_OK => "",
         self::RESPONSE_CODE_ERROR_GENERAL => "Something went wrong",
-        self::RESPONSE_CODE_ERROR_INPUT_PARAMS => "Invalid input params list",
+        self::RESPONSE_CODE_ERROR_INPUT_PARAMS => "Invalid input params",
         self::RESPONSE_CODE_ERROR_LOGIN => "Invalid input params list",
         self::RESPONSE_CODE_ERROR_MYSQL => "Error while saving to db"
     ];
@@ -23,6 +24,7 @@ abstract class AjaxController extends HttpController
      * @var array $inputParams
      */
     protected $inputParams = [];
+
 
     protected $responseData = [
         'data' => [],
@@ -53,6 +55,26 @@ abstract class AjaxController extends HttpController
             $this->setAjaxStatus(self::RESPONSE_CODE_ERROR_LOGIN);
             $this->sendAjaxResponse();
             exit;
+        }
+    }
+
+    protected function validateTaskUser($id) {
+        $userId = $this->user->getId();
+
+        $connection = new \mysqli($this->config->getDBHost(), $this->config->getDBUserName(), $this->config->getDBUserPassword(), $this->config->getDBName());
+        $sqlCommand = "SELECT COUNT(id) AS qty FROM tasks WHERE id = ? AND user_id = ?";
+        $stmt = $connection->prepare($sqlCommand);
+        /** i - Integer; d - Double; s - String; b - Blob */
+        $stmt->bind_param('ii', $id, $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $data = $result->fetch_assoc();
+        $qty = (int)$data['qty'];
+        $connection->close();
+
+        if ($qty < 1) {
+            $this->setAjaxStatus(self::RESPONSE_CODE_ERROR_INPUT_PARAMS);
+            $this->sendAjaxResponse();
         }
     }
 

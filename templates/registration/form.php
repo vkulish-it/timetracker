@@ -32,7 +32,7 @@
     </div>
     <input type="submit" value="Register">
     <input type="reset" value="Reset">
-    <p>Already have an account? <a href="/templates/login/login.php">Sign in</a>.</p>
+    <p>Already have an account? <a href="home">Sign in</a>.</p>
 </form>
 
 <!-- captcha; -->

@@ -1,8 +1,9 @@
 <?php
 namespace App\Models;
 
-use App\Models\Config;
+use App\Factory;
 
+/** @todo move to tracker model */
 class Quantity
 {
     protected $config;
@@ -14,7 +15,7 @@ class Quantity
 
     public function __construct()
     {
-        $this->config = new Config();
+        $this->config = Factory::getSingleton(Config::class);
     }
 
     public function getQuantity()

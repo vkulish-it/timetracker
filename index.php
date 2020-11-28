@@ -1,7 +1,5 @@
 <?php
 
-use App\Service\Request;
-
 // define root dir path (project root directory)
 define('ROOT_DIR', realpath(__DIR__));
 /** include file (library) with class description by class name */
@@ -36,10 +34,11 @@ $classes = [
     // @todo describe other controllers
 ];
 $controllerClass = "App\Controller\NotFound";
-$request = new Request();
+$request = App\Factory::getSingleton(App\Service\Request::class);
 $controllerPath = $request->getControllerPath();
 if (array_key_exists($controllerPath, $classes)) {
     $controllerClass = $classes[$controllerPath];
 }
-$controller = new $controllerClass();
+//$controller = new $controllerClass();
+$controller = App\Factory::getNewClass($controllerClass);
 $controller->run();

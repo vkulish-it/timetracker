@@ -1,9 +1,9 @@
 <?php
 namespace App\Controller\Tracker;
 
-use App\Controller\AjaxController;
+use App\Controller\AjaxTrackerController;
 
-class Create extends AjaxController
+class Create extends AjaxTrackerController
 {
     protected $inputParams = ['name', 'time_start', 'state_active'];
 
@@ -13,19 +13,13 @@ class Create extends AjaxController
         $timeStart = $this->request->getParam('time_start');
         $stateActive = $this->request->getParam('state_active');
 
-        $connection = new \mysqli($this->config->getDBHost(), $this->config->getDBUserName(), $this->config->getDBUserPassword(), $this->config->getDBName());
-        $sqlCommand = " INSERT INTO tasks (id, user_id, name, time_start, time_finish, duration, state_active) VALUES (NULL, ?, ?, ?, NULL, NULL, ?)";
-        $stmt = $connection->prepare($sqlCommand);
-        /** i - Integer; d - Double; s - String; b - Blob */
-        $stmt->bind_param('issi', $userId, $name, $timeStart, $stateActive);
-        $stmt->execute();
-        if ($connection->errno === 0) {
-            $this->responseData['data']['id'] = $connection->insert_id;
-            $this->setAjaxStatus(self::RESPONSE_CODE_OK);
-        } else {
+        $createdTaskId = $this->tracker->createNewTask($userId, $name, $timeStart, $stateActive);
+        if ($createdTaskId === null) {
             $this->setAjaxStatus(self::RESPONSE_CODE_ERROR_MYSQL);
+        } else {
+            $this->responseData['data']['id'] = $createdTaskId;
+            $this->setAjaxStatus(self::RESPONSE_CODE_OK);
         }
-        $connection->close();
 
         $this->sendAjaxResponse();
     }

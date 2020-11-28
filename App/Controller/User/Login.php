@@ -5,7 +5,6 @@ use App\Controller\HttpController;
 
 class Login extends HttpController
 {
-
     protected $checkForLoggedIn = false;
 
     public function run() {

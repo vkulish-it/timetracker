@@ -1,5 +1,9 @@
-<?php ?>
-<?php $user = new \App\Models\User(); ?>
+<?php
+use App\Factory;
+use App\Models\User;
+
+$user = Factory::getSingleton(User::class);
+?>
 <h3>Account data settings</h3>
 
 <div class="row" id="user-data">

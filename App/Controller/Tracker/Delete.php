@@ -1,21 +1,22 @@
 <?php
 namespace App\Controller\Tracker;
 
-use App\Controller\AjaxController;
+use App\Controller\AjaxTrackerController;
 
-class Delete extends AjaxController
+class Delete extends AjaxTrackerController
 {
     protected $inputParams = ['id'];
 
     public function run() {
         $taskId = (int)$this->request->getParam('id');
         $this->validateTaskUser($taskId);
-        $connection = new \mysqli($this->config->getDBHost(), $this->config->getDBUserName(), $this->config->getDBUserPassword(), $this->config->getDBName());
-        $sqlCommand = "DELETE FROM tasks WHERE id = " . $taskId .";";
-        if ($connection->query($sqlCommand) === FALSE) {
+
+        if ($this->tracker->deleteById($taskId) === true) {
+            $this->setAjaxStatus(self::RESPONSE_CODE_OK);
+        } else {
             $this->setAjaxStatus(self::RESPONSE_CODE_ERROR_MYSQL);
-        };
-        $connection->close();
+        }
+
         $this->sendAjaxResponse();
     }
 }

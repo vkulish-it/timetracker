@@ -4,7 +4,7 @@
         <button class="tablinks" onclick="openTab('tab-2', this)">Statistic</button>
         <button class="tablinks" onclick="openTab('tab-3', this)">Account data settings</button>
     </div>
-    <div class="tabcontent" id="tab-1">
+    <div class="tabcontent tab-tracker" id="tab-1">
         <?php include ROOT_DIR . "/templates/main/tab1/content.php"; ?>
     </div>
     <div class="tabcontent" id="tab-2">

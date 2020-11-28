@@ -1,4 +1,8 @@
-<?php $user = new \App\Models\User(); ?>
+<?php
+use App\Factory;
+use App\Models\User;
+
+$user = Factory::getSingleton(User::class); ?>
 <div id="header">
     <div id="current_date_time_block"></div>
     <?php if ($user->isLoggedIn()) { ?>

@@ -1,114 +1,99 @@
 <?php ?>
-<h3>Tracker</h3>
-<p>Current Task</p>
-<div id="current-task" class="row current-task">
+<div id="current-task" class="row current-task"></div>
+<div id="completed-tasks"></div>
+
+<template id="template-current-task">
     <input type="text" name="name" id="current-name" placeholder="Current Task">
-    <button id="current-play" class="play" onclick="currentPlay()">Play</button>
-    <button id="current-stop" class="stop" onclick="currentStop()">Stop</button>
+    <button id="current-play" class="play" onclick="timerStart()">Play</button>
+    <button id="current-stop" class="stop" onclick="timerStop()" disabled>Stop</button>
     <div>
         <label for="current-start">Time start</label>
-        <input type="time" name="current-start" id="current-start" step="1">
-    </div>
-    <div>
-        <label for="current-finish">Time finish</label>
-        <input type="time" name="current-finish" id="current-finish" step="1">
+        <input type="time" name="current-start" id="current-start" step="1" disabled>
     </div>
     <div>
         <label for="current-duration">Duration</label>
-        <input type="time" name="current-duration" id="current-duration" step="1">
+        <input type="time" name="current-duration" id="current-duration" step="1" disabled>
     </div>
-    <button id="current-remove" class="remove" onclick="currentDelete()">Remove</button>
-</div>
+    <button id="current-remove" class="remove" onclick="timerDelete()">Remove</button>
+</template>
 
-<template id="test">
-    <h2>hello</h2>
+<template id="template-tasks-day-container">
+    <div class="tasks-day" id="task-day-^^^date^^^"></div>
+</template>
+
+<template id="template-task-header">
+    <div class="task-header">
+        <div>^^^date-string^^^</div>
+        <div>
+            <input type="time" step="1" value="^^^duration-day^^^" disabled>
+        </div>
+    </div>
+</template>
+
+<template id="template-task-sum">
+    <div>^^^name^^^</div>
+    <button id="current-play" class="play" onclick="timerStart('^^^id^^^')">Play</button>
+    <div>
+        <input type="time" step="1" value="^^^time-start^^^" disabled> - <input type="time" step="1" value="^^^time-finish^^^" disabled>
+    </div>
+    <div>
+        <input type="time" step="1" value="^^^duration-sum^^^" disabled>
+    </div>
+    <button class="row-btn-collapsible">Expand</button>
+</template>
+
+<template id="template-task">
+    <div>^^^name^^^</div>
+    <button id="current-play" class="play" onclick="timerStart('^^^id^^^')">Play</button>
+    <div>
+        <input type="time" step="1" value="^^^time-start^^^" disabled> - <input type="time" step="1" value="^^^time-finish^^^" disabled>
+    </div>
+    <div>
+        <input type="time" step="1" value="^^^duration^^^" disabled>
+    </div>
+    <button class="remove" onclick="timerDelete('^^^id^^^')">Remove</button>
 </template>
 
 
 <style>
-    .row {
+    .tab-tracker .row {
         display: flex;
     }
 </style>
 
 <script>
     const tracker = {
-        countSwitch: false,
+        default: {
+            id: null,
+            name: "",
+            start: null,
+            finish: null,
+            duration: 0,
+            state: 0,
+            date: null
+        },
         current: {
             id: null,
             name: "",
             start: null,
             finish: null,
-            duration: null,
-            state: null
-        }
-    };
-</script>
-
-<!-- define all global variables-->
-<!-- 1. Установить начальное значение глобальной переменной countSwitch false-->
-<!-- 1. Когда загрузиться страница, записать вызов функции timeTick каждую секунду бесконечно-->
-
-<!--// 1. При нажатии кнопки play сделать disabled play button, взять текущее время с jS и сохранить его в глобальную переменную времени начала таска currentTimeStart-->
-<!--// 1. Обратиться к базе данных (ajax) с целью создания нового таска (передаю: название таска name, время начала time_start, state_active true; получаем: id, response_code 1-OK, response_message)-->
-<!--// Если response_code не 1-OK, то вывести response_message и прервать текущее действие-->
-<!--// Сохранить id в глобальную переменную currentId-->
-<!---->
-<!--// Запустить таймер: вывести время начала в инпут с id="time-start", установить глобальную переменную countSwitch, которая определяет пересчитывает таймер или нет-->
-<!--//  function timeTick() если в переменной countSwitch установлено значение true, то считаем как разницу между текущим временем(JS) и временем начала таска currentTimeStart-->
-<!--// вывод в id="duration",-->
-
-<script>
-    function timeTick() {
-        // то считаем как разницу между текущим временем(JS) и временем начала таска currentTimeStart
-        // вывод в id="current-duration"
-        if (tracker.countSwitch) {
-            let timeNow = new Date();
-            let diff = timeNow - tracker.current.start;
-            document.getElementById('current-duration').value = new Date(diff).toISOString().substr(11, 8);
-            tracker.current.duration = diff;
+            duration: 0,
+            state: 0,
+            date: null
+        },
+        tasks: {
+            <?php //echo $this->getAllTasksDataInJsFormat() ?>
         }
     }
+</script>
 
+<script>
     document.addEventListener('DOMContentLoaded', function () {
+        resetCurrentTaskRow();
         setInterval(timeTick, 1000);
     });
 
-    function currentPlay() {
-        document.getElementById('current-play').disabled = true;
-
-        let currentDate = new Date();
-        tracker.current.start = currentDate;
-
-        let timeObj = getTimeParts(currentDate);
-
-        document.getElementById('current-start').value = timeObj.time;
-
-        //название таска name, время начала time_start, state_active true
-        let name = document.getElementById("current-name").value;
-        tracker.current.name = name;
-
-        $.ajax({
-            url: '/tracker/create',
-            type: 'post',
-            data: {
-                'name': name,
-                'time_start': timeObj.fullTime, // in timestamp format
-                'state_active': 1 // true
-            },
-            dataType : "json",
-        })
-        .success(function (resultData) {
-            if (resultData.status.code !== 1) {
-                alert(resultData.status.message);
-                return;
-            }
-            tracker.current.id = resultData.data.id;
-            tracker.countSwitch = true;
-            tracker.current.state = 1;
-        });
-    }
-
+    /** Get object with year, month, ... min, sec by Date() */
     function getTimeParts(dateTime) {
         let timeObj = {};
         timeObj.year = dateTime.getFullYear();
@@ -118,24 +103,67 @@
         timeObj.min = ('0' + dateTime.getMinutes()).substr(-2, 2);
         timeObj.sec = ('0' + dateTime.getSeconds()).substr(-2, 2);
         timeObj.time = timeObj.hours + ":" + timeObj.min + ":" + timeObj.sec;
-        timeObj.fullTime = timeObj.year + "-" + timeObj.month + "-" + timeObj.day + " " + timeObj.time;
+        timeObj.date = timeObj.year + "-" + timeObj.month + "-" + timeObj.day;
+        timeObj.fullTime = timeObj.date + " " + timeObj.time;
         return timeObj;
     }
-    
-    // todo
-    function currentStop() {
-        document.getElementById('current-play').disabled = false;
-        tracker.countSwitch = false;
-        tracker.current.state = 0;
 
+    /** Update current duration time */
+    function timeTick() {
+        if (tracker.current.state) {
+            let timeNow = new Date();
+            let diff = timeNow - tracker.current.start;
+            document.getElementById('current-duration').value = new Date(diff).toISOString().substr(11, 8);
+            tracker.current.duration = diff;
+        }
+    }
+
+    function timerStart(taskId = null) {
+        timerStop();
+        if (taskId !== null) {
+            document.getElementById("current-name").value = tracker.tasks[taskId].name;
+        }
+        document.getElementById('current-play').disabled = true;
+        document.getElementById('current-stop').disabled = false;
         let currentDate = new Date();
-        tracker.current.finish = currentDate;
-
+        tracker.current.start = currentDate;
         let timeObj = getTimeParts(currentDate);
+        document.getElementById('current-start').value = timeObj.time;
+        let name = document.getElementById("current-name").value;
+        tracker.current.name = name;
+        tracker.current.date = timeObj.date;
+        tracker.current.state = 1;
+        $.ajax({
+            url: '/tracker/create',
+            type: 'post',
+            data: {
+                'name': name,
+                'time_start': timeObj.fullTime, // in timestamp format
+                'state_active': 1 // true
+            },
+            dataType: "json",
+        })
+            .success(function (resultData) {
+                if (resultData.status.code !== 1) {
+                    alert(resultData.status.message);
+                    return;
+                }
+                tracker.current.id = resultData.data.id;
+            });
+    }
 
-        document.getElementById('current-finish').value = timeObj.time;
-
-        //название  время окончания time_finish, state_active false, duration
+    function timerStop() {
+        if (tracker.current.state === 0) {
+            return;
+        }
+        document.getElementById('current-stop').disabled = true;
+        document.getElementById('current-play').disabled = false;
+        let currentDate = new Date();
+        let timeObj = getTimeParts(currentDate);
+        tracker.current.state = 0;
+        tracker.current.finish = currentDate;
+        tracker.current.name = document.getElementById("current-name").value;
+        tracker.tasks[tracker.current.id] = tracker.current;
 
         $.ajax({
             url: '/tracker/stop',
@@ -145,45 +173,120 @@
                 'name': tracker.current.name,
                 'time_finish': timeObj.fullTime, // in timestamp format
                 'state_active': 0, // false
-                'duration': tracker.current.duration / 1000,
+                'duration': parseInt(tracker.current.duration / 1000),
             },
             dataType: "json",
         })
             .success(function (resultData) {
                 if (resultData.status.code !== 1) {
                     alert(resultData.status.message);
-                    return;
                 }
-                tracker.countSwitch = false;
-                tracker.current.state = 0;
             });
+
+        resetCurrentTaskRow();
+        timerUpdateSection(tracker.current.date);
+        tracker.current = Object.assign({}, tracker.default);
     }
 
-        function currentDelete() {
-
+    function timerDelete(taskId = null) {
+        if (taskId === null) { // removing current task
+            if (tracker.current.state) {
+                $.ajax({
+                    url: '/tracker/delete',
+                    type: 'post',
+                    data: {
+                        'id': tracker.current.id
+                    },
+                    dataType: "json",
+                })
+                    .success(function (resultData) {
+                        if (resultData.status.code !== 1) {
+                            alert(resultData.status.message);
+                        }
+                    });
+                tracker.current = Object.assign({}, tracker.default);
+            }
+            resetCurrentTaskRow();
+        } else { // removing of non-current task
             $.ajax({
                 url: '/tracker/delete',
                 type: 'post',
                 data: {
-                    'id': tracker.current.id,
+                    'id': tracker.current.id
                 },
                 dataType: "json",
             })
                 .success(function (resultData) {
                     if (resultData.status.code !== 1) {
                         alert(resultData.status.message);
-                        return;
                     }
-                    tracker.countSwitch = false;
-                    tracker.current.state = 0;
                 });
+
+            let date = tracker.tasks[taskId].date;
+            delete tracker.tasks[taskId];
+            timerUpdateSection(date);
+        }
+    }
+
+    function resetCurrentTaskRow() {
+        document.getElementById('current-task').innerHTML = document.getElementById('template-current-task').innerHTML;
+    }
+
+    function timerUpdateSection(date) { // date = "2020-28-11"
+        let dayContainer = document.getElementById('task-day-' + date);
+
+        //add container for single day tasks
+        if (dayContainer === null) {
+            var dayContainerHtml = document.getElementById('template-tasks-day-container').innerHTML;
+            dayContainerHtml = dayContainerHtml.replace('^^^date^^^', date);
+            let whereToAdd = document.getElementById('completed-tasks');
+            let whereToAddHtml = whereToAdd.innerHTML;
+            if (getTimeParts(new Date()).time === date) {
+                whereToAdd.innerHTML = dayContainerHtml + whereToAddHtml;
+            } else {
+                whereToAdd.innerHTML = whereToAddHtml + dayContainerHtml;
+            }
+            dayContainer = document.getElementById('task-day-' + date);
         }
 
+        // collect all tasks for required day
+        let dayTasks = {};
+        let dayTasksDuration = 0;
+        let singleTasksHtml = '';
+        let lastId;
+        for (const taskId in tracker.tasks) {
+            if (tracker.tasks[taskId].date === date) {
+                dayTasks[taskId] = Object.assign({}, tracker.tasks[taskId]);
+                dayTasksDuration += tracker.tasks[taskId].duration;
+                singleTasksHtml += getSingleTaskHtml(taskId);
+                lastId = taskId;
+            }
+        }
+
+        let dateString = tracker.tasks[lastId].start.toString().substring(0, 10);
+        let diffString = new Date(dayTasksDuration).toISOString().substr(11, 8);
+        let dayTasksHeaderHtml = getTasksHeaderHtml(dateString, diffString);
+
+        dayContainer.innerHTML = dayTasksHeaderHtml + singleTasksHtml;
+    }
+
+    function getSingleTaskHtml(id) {
+        let html = document.getElementById('template-task').innerHTML;
+        html = html.replace('^^^name^^^', tracker.tasks[id].name);
+        let timeStart = getTimeParts(tracker.tasks[id].start);
+        html = html.replace('^^^time-start^^^', timeStart.time);
+        let timeFinish = getTimeParts(tracker.tasks[id].finish);
+        html = html.replace('^^^time-finish^^^', timeFinish.time);
+        let diffString = new Date(tracker.tasks[id].duration).toISOString().substr(11, 8);
+        html = html.replace('^^^duration^^^', diffString);
+        html = html.replace('^^^id^^^', id);
+        return html;
+    }
+
+    function getTasksHeaderHtml(dateString, dayTasksDuration) {
+        let html = document.getElementById('template-task-header').innerHTML;
+        html = html.replace('^^^date-string^^^', dateString);
+        html = html.replace('^^^duration-day^^^', dayTasksDuration);
+        return html;
+    }
 </script>
-
-
-<!--// 1. При нажатии кнопки Stop , взять текущее время с jS и сохранить его в глобальную переменную времени окончания таска tracker.current.finish-->
-<!--// 1. Обратиться к базе данных (ajax) с целью UPDATE таска (передаю: время конца time_stop, duration, state_active false; получаем?????: response_code 1-OK, response_message)-->
-<!--// Если response_code не 1-OK, то вывести response_message и прервать текущее действие-->
-<!--// Сохранить time_stop, duration, state_active false в базе -->
-<!--// Остановить таймер: вывести время конца в инпут с id="current-finish"-->

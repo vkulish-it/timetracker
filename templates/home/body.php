@@ -1,6 +1,11 @@
 <?php
-$user = new \App\Models\User();
-$config = new \App\Models\HomePageConfig();
+use App\Models\User;
+use App\Factory;
+use App\Models\HomePageConfig;
+use App\Models\Quantity;
+
+$user = Factory::getSingleton(User::class);
+$config =  Factory::getSingleton(HomePageConfig::class);
 $description = $config->getDescription();
 $sliders = $config->getSliderItems();
 ?>
@@ -36,7 +41,7 @@ $sliders = $config->getSliderItems();
 
 <p><?php echo $description ?></p>
 
-<?php $quantity = new \App\Models\Quantity(); ?>
+<?php $quantity = Factory::getSingleton(Quantity::class); ?>
 <?php echo "Quantity of registered users: " . $quantity->getQuantity() ?>
 
 <?php if (!$user->isLoggedIn()) { ?>

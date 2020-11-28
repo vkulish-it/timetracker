@@ -1,6 +1,7 @@
 <?php
 namespace App\Models;
 
+use App\Factory;
 use \App\Models\Config;
 
 class User
@@ -109,7 +110,7 @@ class User
             }
         }
 
-        $config = new Config();
+        $config = Factory::getSingleton(Config::class);
         $baseUrl = $config->getBaseUrl();
 
         return $baseUrl . '/' . trim($url, '/');
@@ -145,7 +146,7 @@ class User
     }
 
     public function updateSession() {
-        $config = new Config();
+        $config = Factory::getSingleton(Config::class);
         $connection = new \mysqli($config->getDBHost(), $config->getDBUserName(), $config->getDBUserPassword(), $config->getDBName());
         $sqlCommand = "SELECT * FROM users WHERE users.id='" . $this->getAccountData('id') . "';";
         if ($result = $connection->query($sqlCommand)) {

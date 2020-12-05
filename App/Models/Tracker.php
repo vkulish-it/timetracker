@@ -74,4 +74,19 @@ class Tracker
     public function getTaskById($id) {
 
     }
+
+    public function getJsonUserTasks() {
+        $userId = $this->user->getId();
+        $connection = new \mysqli($this->config->getDBHost(), $this->config->getDBUserName(), $this->config->getDBUserPassword(), $this->config->getDBName());
+        $twoDaysAgo = date( 'Y-m-d', strtotime(' -2 day'));
+        $sqlCommand = "SELECT * FROM tasks WHERE user_id = ? AND time_start > ?";
+        $stmt = $connection->prepare($sqlCommand);
+        /** i - Integer; d - Double; s - String; b - Blob */
+        $stmt->bind_param('is', $userId, $twoDaysAgo);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $data = $result->fetch_all(MYSQLI_ASSOC);
+        $connection->close();
+        return json_encode($data);
+    }
 }

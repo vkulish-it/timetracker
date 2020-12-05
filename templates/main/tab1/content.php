@@ -22,7 +22,7 @@
 </template>
 
 <template id="template-task-header">
-    <div class="task-header">
+    <div class="task-header row">
         <div>^^^date-string^^^</div>
         <div>
             <input type="time" step="1" value="^^^duration-day^^^" disabled>
@@ -31,33 +31,56 @@
 </template>
 
 <template id="template-task-sum">
-    <div>^^^name^^^</div>
-    <button id="current-play" class="play" onclick="timerStart('^^^id^^^')">Play</button>
-    <div>
-        <input type="time" step="1" value="^^^time-start^^^" disabled> - <input type="time" step="1" value="^^^time-finish^^^" disabled>
+    <div class="task-group row">
+        <div>^^^name^^^</div>
+        <button id="current-play" class="play" onclick="timerStart('^^^id^^^')">Play</button>
+        <div>
+            <input type="time" step="1" value="^^^time-start^^^" disabled> - <input type="time" step="1" value="^^^time-finish^^^" disabled>
+        </div>
+        <div>
+            <input type="time" step="1" value="^^^duration-sum^^^" disabled>
+        </div>
+        <button class="row-btn-collapsible" onclick="collapseTasks(this)">Collapse</button>
     </div>
-    <div>
-        <input type="time" step="1" value="^^^duration-sum^^^" disabled>
-    </div>
-    <button class="row-btn-collapsible">Expand</button>
 </template>
 
 <template id="template-task">
-    <div>^^^name^^^</div>
-    <button id="current-play" class="play" onclick="timerStart('^^^id^^^')">Play</button>
-    <div>
-        <input type="time" step="1" value="^^^time-start^^^" disabled> - <input type="time" step="1" value="^^^time-finish^^^" disabled>
+    <div class="single-task row">
+        <div>^^^name^^^</div>
+        <button id="current-play" class="play" onclick="timerStart('^^^id^^^')">Play</button>
+        <div>
+            <input type="time" step="1" value="^^^time-start^^^" disabled> - <input type="time" step="1" value="^^^time-finish^^^" disabled>
+        </div>
+        <div>
+            <input type="time" step="1" value="^^^duration^^^" disabled>
+        </div>
+        <button class="remove" onclick="timerDelete('^^^id^^^')">Remove</button>
     </div>
-    <div>
-        <input type="time" step="1" value="^^^duration^^^" disabled>
-    </div>
-    <button class="remove" onclick="timerDelete('^^^id^^^')">Remove</button>
 </template>
 
 
 <style>
     .tab-tracker .row {
         display: flex;
+    }
+    .tab-tracker .tasks-day {
+        border: 1px solid grey;
+    }
+    .tab-tracker .task-header {
+        background-color: grey;
+    }
+    .tab-tracker .task-group {
+        background-color: lightgrey;
+    }
+    .tab-tracker .task-group.row .row-btn-collapsible {
+        width: auto;
+    }
+    .tab-tracker .group-tasks.collapsed {
+        display: none;
+    }
+
+    .tab-tracker .single-task {
+        border: 1px solid black;
     }
 </style>
 
@@ -82,13 +105,17 @@
             date: null
         },
         tasks: {
-            <?php //echo $this->getAllTasksDataInJsFormat() ?>
-        }
+        },
+        initial: <?php echo App\Factory::getSingleton(App\Models\Tracker::class)->getJsonUserTasks(); ?>
     }
 </script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        //@todo 1 = convert tracker-initial to tasks, then set current timer if trackable, then run section Update,
+        //@todo 2 loadMore
+        //@todo 3 = admin pages
+        //@todo 4 = statistic
         resetCurrentTaskRow();
         setInterval(timeTick, 1000);
     });
@@ -184,7 +211,7 @@
             });
 
         resetCurrentTaskRow();
-        timerUpdateSection(tracker.current.date);
+        updateSection(tracker.current.date);
         tracker.current = Object.assign({}, tracker.default);
     }
 
@@ -212,7 +239,7 @@
                 url: '/tracker/delete',
                 type: 'post',
                 data: {
-                    'id': tracker.current.id
+                    'id': taskId
                 },
                 dataType: "json",
             })
@@ -224,7 +251,7 @@
 
             let date = tracker.tasks[taskId].date;
             delete tracker.tasks[taskId];
-            timerUpdateSection(date);
+            updateSection(date);
         }
     }
 
@@ -232,13 +259,13 @@
         document.getElementById('current-task').innerHTML = document.getElementById('template-current-task').innerHTML;
     }
 
-    function timerUpdateSection(date) { // date = "2020-28-11"
+    function updateSection(date) { // date = "2020-28-11"
         let dayContainer = document.getElementById('task-day-' + date);
 
         //add container for single day tasks
         if (dayContainer === null) {
             var dayContainerHtml = document.getElementById('template-tasks-day-container').innerHTML;
-            dayContainerHtml = dayContainerHtml.replace('^^^date^^^', date);
+            dayContainerHtml = dayContainerHtml.replaceAll('^^^date^^^', date);
             let whereToAdd = document.getElementById('completed-tasks');
             let whereToAddHtml = whereToAdd.innerHTML;
             if (getTimeParts(new Date()).time === date) {
@@ -252,41 +279,129 @@
         // collect all tasks for required day
         let dayTasks = {};
         let dayTasksDuration = 0;
-        let singleTasksHtml = '';
         let lastId;
         for (const taskId in tracker.tasks) {
             if (tracker.tasks[taskId].date === date) {
                 dayTasks[taskId] = Object.assign({}, tracker.tasks[taskId]);
                 dayTasksDuration += tracker.tasks[taskId].duration;
-                singleTasksHtml += getSingleTaskHtml(taskId);
                 lastId = taskId;
             }
         }
+        if (lastId) {
+            let dateString = tracker.tasks[lastId].start.toString().substring(0, 10);
+            let diffString = new Date(dayTasksDuration).toISOString().substr(11, 8);
+            let dayTasksHeaderHtml = getTasksHeaderHtml(dateString, diffString);
 
-        let dateString = tracker.tasks[lastId].start.toString().substring(0, 10);
-        let diffString = new Date(dayTasksDuration).toISOString().substr(11, 8);
-        let dayTasksHeaderHtml = getTasksHeaderHtml(dateString, diffString);
+            let allGroupedTasksHtml = "";
+            let groupsTasksData = sortToGroupsByName(dayTasks);
+            for (let i = 0; i < groupsTasksData.length; i++) {
+                allGroupedTasksHtml += getSingleGroupedTasksHtml(groupsTasksData[i])
+            }
+            dayContainer.innerHTML = dayTasksHeaderHtml + allGroupedTasksHtml;
+        } else {
+            dayContainer.innerHTML = "";
+        }
+    }
 
-        dayContainer.innerHTML = dayTasksHeaderHtml + singleTasksHtml;
+    function sortToGroupsByName(dayTasks) {
+        let groupsData = {};
+        let tasks =  Object.assign({}, dayTasks);
+
+        // grouping
+        // data Example:
+        // tasks = {5: {id:5, name: "+"}, 7: {id:7, name: "-"}, 8: {id:8, name: "+"}};
+        // ids = [0=>5, 1=>7, 2=>8]; count = 3;
+
+        let ids = Object.keys(tasks);
+        for (let j = 0; j < ids.length; j++) {
+            let elementName = tasks[ids[j]].name;
+            if (elementName in groupsData) {
+                continue;
+            }
+            groupsData[elementName] = {'ids': [ids[j]]};
+            for (let i = 1; i < ids.length; i++) {
+                let id = ids[i];
+                if (tasks[id].name === elementName && !groupsData[elementName].ids.includes(id)) {
+                    groupsData[elementName].ids.push(id);
+                }
+            }
+        }
+
+        // add start time, finish time, total duration and lastId to groupsData
+        Object.keys(groupsData).forEach( function(name) {
+            let group = groupsData[name];
+            let taskIds = group.ids;
+            let start, finish, lastId;
+            let duration = 0;
+            for (let i = 0; i < taskIds.length; i++) {
+                let taskId = taskIds[i];
+                let task = tasks[taskId];
+                if (!start || (start && start > task.start)) {
+                    start = task.start;
+                }
+                if (!finish || (finish && finish < task.finish)) {
+                    finish = task.finish;
+                }
+                duration += task.duration;
+                lastId = taskId;
+            }
+            groupsData[name].name = name;
+            groupsData[name].start = start;
+            groupsData[name].finish = finish;
+            groupsData[name].duration = duration;
+            groupsData[name].lastId = lastId;
+        });
+
+        //sort by time latest is at top, so should be first
+        return Object.values(groupsData).sort(function (a, b) {
+            return b.finish - a.finish;
+        });
+    }
+
+    function getSingleGroupedTasksHtml(groupTasksData) {
+        let html = document.getElementById('template-task-sum').innerHTML;
+        html = html.replaceAll('^^^name^^^', groupTasksData.name);
+        let timeStart = getTimeParts(groupTasksData.start);
+        html = html.replaceAll('^^^time-start^^^', timeStart.time);
+        let timeFinish = getTimeParts(groupTasksData.finish);
+        html = html.replaceAll('^^^time-finish^^^', timeFinish.time);
+        let diffString = new Date(groupTasksData.duration).toISOString().substr(11, 8);
+        html = html.replaceAll('^^^duration-sum^^^', diffString);
+        html = html.replaceAll('^^^id^^^', groupTasksData.lastId);
+
+        html += '<div class="group-tasks collapsed">';
+        let tasksIds = groupTasksData.ids;
+        for (let i = 0; i < tasksIds.length; i++) {
+            html += getSingleTaskHtml(tasksIds[i]);
+        }
+        html += '</div>';
+
+        return html;
     }
 
     function getSingleTaskHtml(id) {
         let html = document.getElementById('template-task').innerHTML;
-        html = html.replace('^^^name^^^', tracker.tasks[id].name);
+        html = html.replaceAll('^^^name^^^', tracker.tasks[id].name);
         let timeStart = getTimeParts(tracker.tasks[id].start);
-        html = html.replace('^^^time-start^^^', timeStart.time);
+        html = html.replaceAll('^^^time-start^^^', timeStart.time);
         let timeFinish = getTimeParts(tracker.tasks[id].finish);
-        html = html.replace('^^^time-finish^^^', timeFinish.time);
+        html = html.replaceAll('^^^time-finish^^^', timeFinish.time);
         let diffString = new Date(tracker.tasks[id].duration).toISOString().substr(11, 8);
-        html = html.replace('^^^duration^^^', diffString);
-        html = html.replace('^^^id^^^', id);
+        html = html.replaceAll('^^^duration^^^', diffString);
+        html = html.replaceAll('^^^id^^^', id);
         return html;
     }
 
     function getTasksHeaderHtml(dateString, dayTasksDuration) {
         let html = document.getElementById('template-task-header').innerHTML;
-        html = html.replace('^^^date-string^^^', dateString);
-        html = html.replace('^^^duration-day^^^', dayTasksDuration);
+        html = html.replaceAll('^^^date-string^^^', dateString);
+        html = html.replaceAll('^^^duration-day^^^', dayTasksDuration);
         return html;
+    }
+
+    function collapseTasks(element) {
+        let groupElement = element.closest(".task-group");
+        let groupTasksElement = groupElement.nextElementSibling;
+        groupTasksElement.classList.toggle("collapsed");
     }
 </script>

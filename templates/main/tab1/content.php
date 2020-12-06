@@ -1,6 +1,7 @@
 <?php ?>
 <div id="current-task" class="row current-task"></div>
 <div id="completed-tasks"></div>
+<div><button id="load-more" onclick="loadMoreTasks()">Load More</button></div>
 
 <template id="template-current-task">
     <input type="text" name="name" id="current-name" placeholder="Current Task">
@@ -106,19 +107,57 @@
         },
         tasks: {
         },
-        initial: <?php echo App\Factory::getSingleton(App\Models\Tracker::class)->getJsonUserTasks(); ?>
+        initial: <?php echo App\Factory::getSingleton(App\Models\Tracker::class)->getJsonUserTasks(); ?>,
     }
 </script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        //@todo 1 = convert tracker-initial to tasks, then set current timer if trackable, then run section Update,
         //@todo 2 loadMore
+        //@todo
         //@todo 3 = admin pages
         //@todo 4 = statistic
-        resetCurrentTaskRow();
+        prepareInitialTasks();
         setInterval(timeTick, 1000);
     });
+
+    function prepareInitialTasks() {
+        let tasksSample;
+        let updateSectionDates = {};
+        let updateCurrent = false;
+        Object.keys(tracker.initial).forEach(function(key) {
+            let task = Object.assign({},tracker.initial[key]);
+            tasksSample = Object.assign({}, tracker.default);
+            tasksSample.id = task.id;
+            tasksSample.name = task.name;
+            tasksSample.start = new Date(task.time_start);
+            if (task.time_finish) {
+                tasksSample.finish = new Date(task.time_finish);
+                tasksSample.duration = tasksSample.finish - tasksSample.start;
+            }
+            tasksSample.date = getTimeParts(tasksSample.start).date;
+            tasksSample.state = task.state_active;
+            if (tasksSample.state) {
+                tracker.current = tasksSample;
+                updateCurrent = true;
+            } else {
+                updateSectionDates[tasksSample.date] = true;
+                tracker.tasks[tasksSample.id] = tasksSample;
+            }
+        });
+
+        resetCurrentTaskRow();
+        if (updateCurrent) {
+            document.getElementById("current-name").value = tracker.current.name;
+            document.getElementById("current-start").value = getTimeParts(tracker.current.start).time;
+            document.getElementById('current-play').disabled = true;
+            document.getElementById('current-stop').disabled = false;
+        }
+
+        Object.keys(updateSectionDates).forEach(function(date) {
+            updateSection(date);
+        });
+    }
 
     /** Get object with year, month, ... min, sec by Date() */
     function getTimeParts(dateTime) {
@@ -305,7 +344,7 @@
 
     function sortToGroupsByName(dayTasks) {
         let groupsData = {};
-        let tasks =  Object.assign({}, dayTasks);
+        let tasks = Object.assign({}, dayTasks);
 
         // grouping
         // data Example:
@@ -403,5 +442,47 @@
         let groupElement = element.closest(".task-group");
         let groupTasksElement = groupElement.nextElementSibling;
         groupTasksElement.classList.toggle("collapsed");
+    }
+
+    function loadMoreTasks() {
+        let minId = Math.min.apply(Math, Object.keys(tracker.tasks));
+        let lastDate = tracker.tasks[minId].date;
+        $.ajax({
+            url: '/tracker/load-more',
+            type: 'post',
+            data: {
+                'date': lastDate,
+            },
+            dataType: "json",
+        })
+            .success(function (resultData) {
+                if (resultData.status.code !== 1) {
+                    alert(resultData.status.message);
+                    return;
+                }
+                if (resultData.data.length === 0) {
+                    document.getElementById('load-more').disabled = true;
+                    return;
+                }
+
+                let tasks = resultData.data;
+                let tasksSample, taskDate;
+                Object.keys(tasks).forEach(function(key) {
+                    let task = Object.assign({},tasks[key]);
+                    tasksSample = Object.assign({}, tracker.default);
+                    tasksSample.id = task.id;
+                    tasksSample.name = task.name;
+                    tasksSample.start = new Date(task.time_start);
+                    if (task.time_finish) {
+                        tasksSample.finish = new Date(task.time_finish);
+                        tasksSample.duration = tasksSample.finish - tasksSample.start;
+                    }
+                    tasksSample.date = getTimeParts(tasksSample.start).date;
+                    tasksSample.state = task.state_active;
+                    tracker.tasks[tasksSample.id] = tasksSample;
+                    taskDate = tasksSample.date;
+                });
+                updateSection(taskDate);
+            });
     }
 </script>

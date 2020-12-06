@@ -89,4 +89,51 @@ class Tracker
         $connection->close();
         return json_encode($data);
     }
+
+    /**
+     * @param string $lastDate
+     * @return array|false
+     */
+    public function getLoadMoreTasks($lastDate) {
+        $userId = $this->user->getId();
+
+        // get previous working date
+        $lastDateString = $lastDate . " 00:00:00";
+        $connection = new \mysqli($this->config->getDBHost(), $this->config->getDBUserName(), $this->config->getDBUserPassword(), $this->config->getDBName());
+        $sqlCommand = "SELECT time_start FROM tasks WHERE user_id = ? AND time_start < ? ORDER BY time_start DESC LIMIT 1";
+        $stmt = $connection->prepare($sqlCommand);
+        /** i - Integer; d - Double; s - String; b - Blob */
+        $stmt->bind_param('is', $userId, $lastDateString);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result === false) {
+            $connection->close();
+            return false;
+        }
+        $data = $result->fetch_assoc();
+        if (!$data || !isset($data['time_start']) || !$data['time_start']) {
+           return [];
+        }
+        $dateTime = $data['time_start']; // 2020-12-03 21:10:01
+        $date = substr($dateTime, 0 ,10); // 2020-12-03
+
+        // get tasks for previous working date
+        $minDateTime = $date . " 00:00:00";
+        $maxDateTime = $date . " 23:59:59";
+        $sqlCommand = "SELECT * FROM tasks WHERE user_id = ? AND time_start >= ? AND time_start <= ?";
+        $stmt = $connection->prepare($sqlCommand);
+        /** i - Integer; d - Double; s - String; b - Blob */
+        $stmt->bind_param('iss', $userId, $minDateTime, $maxDateTime);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result === false) {
+            $connection->close();
+            return false;
+        }
+        $data = $result->fetch_all(MYSQLI_ASSOC);
+        $connection->close();
+
+        return $data;
+    }
+
 }

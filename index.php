@@ -30,6 +30,7 @@ $classes = [
     'tracker/create' => "App\Controller\Tracker\Create",
     'tracker/stop' => "App\Controller\Tracker\Stop",
     'tracker/delete' => "App\Controller\Tracker\Delete",
+    'tracker/load-more' => "App\Controller\Tracker\LoadMore",
 
     // @todo describe other controllers
 ];

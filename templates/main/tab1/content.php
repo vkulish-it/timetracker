@@ -445,8 +445,14 @@
     }
 
     function loadMoreTasks() {
-        let minId = Math.min.apply(Math, Object.keys(tracker.tasks));
-        let lastDate = tracker.tasks[minId].date;
+        let lastDate;
+        if (Object.keys(tracker.tasks).length > 0) {
+            let minId = Math.min.apply(Math, Object.keys(tracker.tasks));
+            lastDate = tracker.tasks[minId].date;
+        } else {
+            let currentDate = new Date();
+            lastDate = getTimeParts(currentDate).date;
+        }
         $.ajax({
             url: '/tracker/load-more',
             type: 'post',

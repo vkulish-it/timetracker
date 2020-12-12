@@ -10,6 +10,7 @@ class User
     const SESSION_KEY_USER_IS_LOGGED_IN = 'is_logged_in';
     const SESSION_KEY_USER_MESSAGES = 'messages';
     const SESSION_KEY_USER_SETTINGS = 'settings';
+    const SESSION_KEY_ADMIN_IS_LOGGED_IN = 'admin_is_logged_in';
 
     public $defaultImageUrl = 'media/img/user-logo-default.png';
 
@@ -177,4 +178,37 @@ class User
 
         $connection->close();
     }
+
+    /**
+     * @return bool
+     */
+    public function isLoggedInAdmin()
+    {
+        if ($_SESSION && $_SESSION[self::SESSION_KEY_ADMIN_IS_LOGGED_IN] === true) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return $this
+     */
+    public function loginAdmin()
+    {
+        $_SESSION[self::SESSION_KEY_ADMIN_IS_LOGGED_IN] = true;
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function logoutAdmin()
+    {
+        if ($_SESSION && array_key_exists(self::SESSION_KEY_ADMIN_IS_LOGGED_IN, $_SESSION)) {
+            unset($_SESSION[self::SESSION_KEY_ADMIN_IS_LOGGED_IN]);
+        }
+        return $this;
+    }
+
 }

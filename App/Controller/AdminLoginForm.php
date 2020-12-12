@@ -1,9 +1,9 @@
 <?php
-namespace App\Controller\Admin;
+namespace App\Controller;
 
 use App\Controller\HttpController;
 
-class LoginForm extends HttpController
+class AdminLoginForm extends HttpController
 {
     protected $checkForLoggedIn = false;
 

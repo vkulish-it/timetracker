@@ -11,10 +11,12 @@ $sliders = $config->getSliderItems();
 ?>
 <div id="slider-1" class="owl-carousel owl-theme">
     <?php foreach ($sliders as $slider): ?>
-        <div class="item">
-            <img src="<?php echo $slider['img'] ?>" alt="">
-            <div class="img-label"><?php echo $slider['txt'] ?></div>
-        </div>
+        <?php if ($slider['show'] == 1) { ?>
+            <div class="item">
+                <img src="<?php echo $slider['img'] ?>" alt="">
+                <div class="img-label"><?php echo $slider['txt'] ?></div>
+            </div>
+        <?php } ?>
     <?php endforeach; ?>
 </div>
 

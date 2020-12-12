@@ -15,6 +15,11 @@ class HomePageConfig
         $this->config = json_decode($this->configJson, true);
     }
 
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
     public function getSliderItems()
     {
         return $this->config['sliders'];
@@ -23,6 +28,16 @@ class HomePageConfig
     public function getDescription()
     {
         return $this->config['description'];
+    }
+
+    public function saveSettings(array $settings)
+    {
+        $jsonString = json_encode($settings, true);
+        try {
+            file_put_contents(ROOT_DIR . DIRECTORY_SEPARATOR . self::CONFIG_FILE_PATH, $jsonString);
+        } catch (\Exception $e) {
+            //@todo
+        }
     }
 }
 

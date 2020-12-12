@@ -35,7 +35,28 @@ class Request
         return null;
     }
 
-    public function inputParams(string $string)
+    /**
+     * @return array
+     */
+    public function getFiles()
     {
+        if (isset($_FILES)) {
+            return $_FILES;
+        }
+
+        return [];
+    }
+
+    /**
+     * @param string $key name of request parameter
+     * @return array
+     */
+    public function getFile(string $key)
+    {
+        if (isset($_FILES) && array_key_exists($key, $_FILES)) {
+            return $_FILES[$key];
+        }
+
+        return null;
     }
 }

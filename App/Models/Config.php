@@ -7,6 +7,7 @@ class Config
     private $db;
     private $defaultValue;
     private $baseUrl;
+    private $admin;
 
     public function __construct()
     {
@@ -14,6 +15,7 @@ class Config
         $setting = include ROOT_DIR . "/App/config/setting.php";
         $this->defaultValue = $setting["default"];
         $this->baseUrl = $setting["base_url"];
+        $this->admin = include ROOT_DIR . "/App/config/admin.php";
     }
 
     public function getBaseUrl()
@@ -49,5 +51,15 @@ class Config
     public function getDefaultAccountSettings()
     {
         return $this->defaultValue;
+    }
+
+    public function getAdminLogin()
+    {
+        return $this->admin['login'];
+    }
+
+    public function getAdminPassword()
+    {
+        return $this->admin['password'];
     }
 }

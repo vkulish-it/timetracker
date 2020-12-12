@@ -1,7 +1,7 @@
 <form action="/admin/account/login" method="post">
     <div>
-        <label for="email">email:</label>
-        <input type="email" name="email" id="email" placeholder="Enter your email" title="Enter your email" required>
+        <label for="login">login:</label>
+        <input type="text" name="login" id="login" placeholder="Enter your login" title="Enter your login" required>
     </div>
     <div>
         <label for="psw">password:</label>

@@ -5,6 +5,8 @@ use App\Models\User;
 $user = Factory::getSingleton(User::class); ?>
 <div id="header">
     <div id="current_date_time_block"></div>
+    <a href="/" title="Account">Home</a>
+    <a href="/main" title="Account">Account</a>
     <?php if ($user->isLoggedIn()) { ?>
         <span><a href="/logout">Logout</a></span>
     <?php } else { ?>

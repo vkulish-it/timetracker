@@ -18,7 +18,9 @@ $classes = [
     'admin/account/logout' => "App\Controller\AdminAccountLogout",
     'admin/setting' => "App\Controller\Admin\Setting",
     'admin/setting/save' => "App\Controller\Admin\Setting\Save",
-    'admin/user/grid' => "App\Controller\Admin\User\Grid",
+    'admin/users' => "App\Controller\Admin\Users",
+    'admin/users/edit-form' => "App\Controller\Admin\Users\EditForm",
+    'admin/users/edit' => "App\Controller\Admin\Users\Edit",
     'login' => "App\Controller\LoginForm",
     'user/login' => "App\Controller\User\Login",
     'logout' => "App\Controller\User\Logout",
@@ -35,8 +37,6 @@ $classes = [
     'tracker/stop' => "App\Controller\Tracker\Stop",
     'tracker/delete' => "App\Controller\Tracker\Delete",
     'tracker/load-more' => "App\Controller\Tracker\LoadMore",
-
-    // @todo describe other controllers
 ];
 $controllerClass = "App\Controller\NotFound";
 $request = App\Factory::getSingleton(App\Service\Request::class);

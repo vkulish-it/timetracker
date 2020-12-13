@@ -7,7 +7,7 @@ $configModel = Factory::getSingleton(HomePageConfig::class);
 $description = $configModel->getDescription();
 $sliders = $configModel->getSliderItems();
 ?>
-
+<h2>Homepage setting:</h2>
 <form action="/admin/setting/save" method="post" enctype='multipart/form-data'>
     <div>
         <label for="description">Description:</label>

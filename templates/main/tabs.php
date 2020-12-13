@@ -1,7 +1,7 @@
 <div class="tabs">
     <div class="tab">
         <button id="tab-1-btn" class="tablinks" onclick="openTab('tab-1', this)">Tracker</button>
-        <button class="tablinks" onclick="openTab('tab-2', this)">Statistic</button>
+<!--        <button class="tablinks" onclick="openTab('tab-2', this)">Statistic</button>-->
         <button class="tablinks" onclick="openTab('tab-3', this)">Account data settings</button>
     </div>
     <div class="tabcontent tab-tracker" id="tab-1">

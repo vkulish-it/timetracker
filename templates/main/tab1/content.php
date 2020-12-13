@@ -32,7 +32,7 @@
 </template>
 
 <template id="template-task-sum">
-    <div class="task-group row">
+    <div class="task-group row ^^^prepare-class^^^">
         <div>^^^name^^^</div>
         <button id="current-play" class="play" onclick="timerStart('^^^id^^^')">Play</button>
         <div>
@@ -108,6 +108,7 @@
         tasks: {
         },
         initial: <?php echo App\Factory::getSingleton(App\Models\Tracker::class)->getJsonUserTasks(); ?>,
+        prepareTaskName: '<?php echo $this->user->getAccountSettings('prep_task_name'); ?>'
     }
 </script>
 
@@ -400,6 +401,11 @@
     function getSingleGroupedTasksHtml(groupTasksData) {
         let html = document.getElementById('template-task-sum').innerHTML;
         html = html.replaceAll('^^^name^^^', groupTasksData.name);
+        let prepareClass = "";
+        if (groupTasksData.name === tracker.prepareTaskName) {
+            prepareClass = "prepare";
+        }
+        html = html.replaceAll('^^^prepare-class^^^', prepareClass);
         let timeStart = getTimeParts(groupTasksData.start);
         html = html.replaceAll('^^^time-start^^^', timeStart.time);
         let timeFinish = getTimeParts(groupTasksData.finish);

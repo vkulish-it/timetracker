@@ -41,7 +41,7 @@ class Design extends HttpController
             }
 
             if ($isSettingsExists) {
-                $sqlCommand = "UPDATE settings SET bkg_color='" . $bkgColor . "',  main_bkg_color='" . $mainBkgColor . "', prep_task_color = '" . $prepTaskColor . "', bkg_color='" . $borderColor . "',  font_color='" . $fontColor . "', font_size = '" . $fontSize . "' WHERE settings.user_id='" . $userId . "';";
+                $sqlCommand = "UPDATE settings SET bkg_color='" . $bkgColor . "',  main_bkg_color='" . $mainBkgColor . "', prep_task_color = '" . $prepTaskColor . "', border_color='" . $borderColor . "',  font_color='" . $fontColor . "', font_size = '" . $fontSize . "' WHERE settings.user_id='" . $userId . "';";
             } else {
                 $sqlCommand = "INSERT INTO settings (id, user_id, bkg_color, main_bkg_color, prep_task_color, border_color, font_color, font_size)
         VALUES (NULL, '" . $userId . "', '" . $bkgColor . "', '" . $mainBkgColor . "', '" . $prepTaskColor . "', '" . $borderColor . "', '" . $fontColor . "', " . $fontSize . ");";

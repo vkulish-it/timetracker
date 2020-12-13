@@ -14,8 +14,13 @@ class Login extends HttpController
         $sqlCommand = "SELECT * FROM users WHERE email ='" . $login . "';";
         if ($result = $connection->query($sqlCommand)) {
             $userData = $result->fetch_object();
+            $connection->close();
             if ($userData && password_verify($passwd, $userData->passwd_hash)) {
                 $userDataArray = get_object_vars($userData);
+                if ($userDataArray['enabled'] != 1) {
+                    $this->user->addMessage("Your user is inactive. Please, contact support team.");
+                    $this->response->setRedirect("home");
+                }
                 $this->user->login($userDataArray);
                 $this->response->setRedirect("main");
             } else {
@@ -23,9 +28,9 @@ class Login extends HttpController
                 $this->response->setRedirect("home");
             }
         } else {
+            $connection->close();
             $this->user->addMessage("Error while checking email and password");
             $this->response->setRedirect("home");
         }
-        $connection->close();
     }
 }

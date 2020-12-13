@@ -2,7 +2,7 @@
 namespace App\Models;
 
 use App\Factory;
-use \App\Models\Config;
+use App\Models\Config;
 
 class User
 {
@@ -211,4 +211,35 @@ class User
         return $this;
     }
 
+    /**
+     * @return array
+     */
+    public function getAllUsersData()
+    {
+        $config = Factory::getSingleton(Config::class);
+        $connection = new \mysqli($config->getDBHost(), $config->getDBUserName(), $config->getDBUserPassword(), $config->getDBName());
+        $sqlCommand = "SELECT * FROM users;";
+        $result = mysqli_query($connection, $sqlCommand);
+        $users = [];
+        while ($row = mysqli_fetch_assoc($result)) {
+            $users[$row['id']] = $row;
+        }
+        $connection->close();
+        return $users;
+    }
+
+    /**
+     * @return array
+     */
+    public function getUserDataById($id)
+    {
+        $id = (int)$id;
+        $config = Factory::getSingleton(Config::class);
+        $connection = new \mysqli($config->getDBHost(), $config->getDBUserName(), $config->getDBUserPassword(), $config->getDBName());
+        $sqlCommand = "SELECT * FROM users WHERE id=$id;";
+        $result = mysqli_query($connection, $sqlCommand);
+        $user = mysqli_fetch_assoc($result);
+        $connection->close();
+        return $user;
+    }
 }
